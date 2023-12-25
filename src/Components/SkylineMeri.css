@@ -1,0 +1,22 @@
+.left-door,
+.right-door {
+  transition: transform 2s ease-in-out; 
+}
+
+.circle-container {
+  transition: transform 2s ease-in-out, opacity 2s ease-in-out; 
+}
+
+.doors-open .left-door {
+  transform: translateX(-100%);
+}
+
+.doors-open .right-door {
+  transform: translateX(100%);
+}
+
+.circle-container.fade-out {
+  transform: rotate(360deg);
+  opacity: 0;
+}
+
