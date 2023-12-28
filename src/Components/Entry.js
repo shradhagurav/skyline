@@ -3,33 +3,32 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Entry = () => {
   const [countdown, setCountdown] = useState(5 * 60); // Countdown in seconds
-  const [exit, setExit] = useState(false);
+  const [exit, setExit] = useState(false);            // for exit to home page
   const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountdown((prevCountdown) => {
-        if (prevCountdown === 0) {
-          clearInterval(interval);
-          setExit(true);
+      setCountdown((prevCountdown) => {      // setcountdown is a callback functon its take pervcountdown as value
+        if (prevCountdown === 0) {             // when the countdown reaches 0 
+          clearInterval(interval);            // its clear the interval
+          setExit(true);                      // and when setexist true  its shows time expire
         }
-        return prevCountdown - 1;
+        return prevCountdown - 1;               // countdown is -1 for 10 , 9 , 8...
       });
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval);       //when we enter the correct password timer is stop clear interval
   }, []);
 
   useEffect(() => {
     if (exit) {
-      // Automatically redirect to home page
-      navigate('/');
+      navigate('/');                                 // Automatically redirect to home page 
     }
   }, [exit, navigate]);
 
   const handleExit = () => {
     // Handle exit logic here
-    console.log('Exiting...');
+    console.log('Exiting...');  //exit button is clicked before the countdown timer reaches 0
     setExit(true); // Set exit to true manually in case the button is clicked before the countdown ends
   };
 

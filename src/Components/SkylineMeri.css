@@ -20,3 +20,21 @@
   opacity: 0;
 }
 
+/* Add this to your CSS file */
+.parent {
+  width: 50px;
+  height: 200px;
+  border: 1px solid;
+  position: relative;
+  overflow: hidden; /* Hide the overflow content */
+  margin-left: 250px;
+}
+
+.child {
+  width: 100%;
+  height: 100%; /* Set the initial height to 100% */
+  background: red;
+  transition: height 0.3s ease; /* Smooth transition effect */
+  position: absolute;
+  bottom: 0; /* Start the child from the bottom */
+}

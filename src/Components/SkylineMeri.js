@@ -1,3 +1,5 @@
+//SkylineMeri
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -7,28 +9,20 @@ import timer from "../assets/timer.png";
 import yoga from "../assets/yoga.png";
 import clock from "../assets/clock.png";
 import "./SkylineMeri.css"; 
+import { useCountdown } from "./CountdownProvider";
 
 const SkylineMeri = () => {
+  const { countdown, exit, setExit } = useCountdown();
+
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [countdown, setCountdown] = useState(5 * 60); // 5 minutes in seconds
-  const [exit, setExit] = useState(false);
   const [doorsOpen, setDoorsOpen] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCountdown((prevCountdown) => {
-        if (prevCountdown === 0) {
-          clearInterval(interval);
-          setExit(true);
-        }
-        return prevCountdown - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // To reload the prevCountdown on browser refresh
+  window.onbeforeunload = () => {
+    localStorage.clear();
+  };
 
   useEffect(() => {
     if (exit) {
@@ -76,8 +70,8 @@ const SkylineMeri = () => {
     }
   };
 
-  const minutes = Math.floor(countdown / 60);
-  const seconds = countdown % 60;
+  const displayMinutes = Math.floor(countdown / 60);
+  const displaySeconds = countdown % 60;
 
   return (
     <div
@@ -149,16 +143,21 @@ const SkylineMeri = () => {
           </div>
 
           {/* Right door */}
-          <div className="bg-black  pt-[20rem]  md:pt-0 w-full md:w-1/2 lg:h-screen rounded-r-lg border-4 border-[#6cd0ce] flex flex-col items-center justify-center right-door">
-            <div className=" items-center">
-              <img
-                src={clock}
-                alt="Hour Icon"
-                className="h-fit w-fit  md:w-[17rem] md:h-[18rem] md:ml-[18rem]"
-              />
+          <div className="bg-black pt-[20rem] md:pt-0 w-full md:w-1/2 lg:h-screen rounded-r-lg border-4 border-[#6cd0ce] flex flex-col items-center justify-center right-door">
+            {/* Display the progress bar regardless of doorsOpen */}
+            <div className="parent">
+              <div
+                className="child"
+                style={{
+                  background: `linear-gradient(to bottom, black  ${100 - (countdown / (5 * 60)) * 100}%, #6cd0ce  0%)`,
+                  border: "2px solid #6cd0ce",
+                }}
+              ></div>
             </div>
-            <p className="text-[#6cd0ce] text-2xl  md:ml-[270px]">
-              {exit ? "0 min 0 sec left" : `${minutes} min ${seconds} sec left`}
+            
+            {/* Display the clock and time */}
+            <p className="text-[#6cd0ce] text-2xl md:ml-[270px]">
+            {exit ? "0 min 0 sec left" : `${displayMinutes} min ${displaySeconds} sec left`}
             </p>
           </div>
         </div>
